@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { CarDetails, Select } from "./elements/index.js";
+import { CarDetails, Select, PerformanceOptions } from "./elements/index.js";
 import data from "../../data.json";
-
-// Define a constant named "data" that contains an array of car objects.
 
 const Search = () => {
   const [marca, setMarca] = useState();
@@ -12,8 +10,9 @@ const Search = () => {
   const [option, setOption] = useState("Flex");
 
   // Retrieves and sorts the options available for selecting: brand, model, year, and engine
-  function getSearchOptions(marca, modelo, ano, motor) {
+  function getSearch(marca, modelo, ano, motor) {
     const marcas = Array.from(new Set(data.map((car) => car.marca))).sort();
+
     const modelos = Array.from(
       new Set(
         data
@@ -67,6 +66,13 @@ const Search = () => {
     return { selectedCar, marcas, modelos, anos, motores };
   }
 
+  const { selectedCar, marcas, modelos, anos, motores } = getSearch(
+    marca,
+    modelo,
+    ano,
+    motor
+  );
+
   // Returns another function, which calculates the values of a selected car based on the user's performance option.
   function getCarValues() {
     return (car) => {
@@ -93,13 +99,6 @@ const Search = () => {
       }
     };
   }
-
-  const { selectedCar, marcas, modelos, anos, motores } = getSearchOptions(
-    marca,
-    modelo,
-    ano,
-    motor
-  );
 
   const calculateValues = getCarValues();
 
@@ -166,41 +165,7 @@ const Search = () => {
         preco={preco}
       />
 
-      {/* Render the radio buttons for selecting the performance option. */}
-      {motor && (
-        <div className="flex h-12 justify-center gap-4 mt-10">
-          <label>
-            <input
-              type="radio"
-              name="performanceOption"
-              value="Eco"
-              checked={option === "Eco"}
-              onChange={(e) => setOption(e.target.value)}
-            />
-            Eco
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="performanceOption"
-              value="Flex"
-              checked={option === "Flex"}
-              onChange={(e) => setOption(e.target.value)}
-            />
-            Flex
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="performanceOption"
-              value="Sport"
-              checked={option === "Sport"}
-              onChange={(e) => setOption(e.target.value)}
-            />
-            Sport
-          </label>
-        </div>
-      )}
+      {motor && <PerformanceOptions option={option} setOption={setOption} />}
     </div>
   );
 };
