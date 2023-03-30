@@ -11,10 +11,8 @@ function CarDetails({
   return (
     <div className="container mx-auto overflow-hidden bg-white shadow sm:rounded-lg">
       <div className="px-4 py-5 sm:px-6">
-        <h3 className="text-base font-semibold leading-6 text-gray-900">
-          {heading}
-        </h3>
-        <p className="mt-1 max-w-2xl text-sm text-gray-500">{description}</p>
+        <h3 className="text-gray-900">{heading}</h3>
+        <p className="mt-1 text-gray-500">{description}</p>
       </div>
       <div className="border-t border-gray-200">
         <dl>
