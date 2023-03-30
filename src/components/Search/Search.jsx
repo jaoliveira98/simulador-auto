@@ -8,6 +8,7 @@ const Search = () => {
   const [year, setYear] = useState();
   const [engine, setEngine] = useState();
   const [option, setOption] = useState("Flex");
+  const [showDetails, setShowDetails] = useState(false);
 
   // Returns and sorts the options available for selecting: brand, model, year, and engine
   function getSearch(make, model, year, engine) {
@@ -102,6 +103,8 @@ const Search = () => {
   // Destructure the returned object into "binary", "hp", and "price" variables.
   const { binary, hp, price } = calculateValues(selectedCar);
 
+  const searchAvailable = make && model && year && engine;
+
   return (
     <div className="flex items-center justify-center flex-col">
       <div className="flex h-12 justify-center gap-4 mb-10">
@@ -150,19 +153,37 @@ const Search = () => {
           placeholder="Select engine"
         />
       </div>
+      <button
+        className={`px-4 py-2 rounded text-white ${
+          searchAvailable ? "bg-green-500" : "bg-blue-500"
+        }`}
+        onClick={() => {
+          if (searchAvailable) {
+            setShowDetails(true); // Update the state to show details
+          }
+        }}
+        disabled={!searchAvailable}
+      >
+        Search
+      </button>
+      <div>
+        {showDetails && (
+          <>
+            <CarDetails
+              heading="Details"
+              description="Car information"
+              selectedCar={selectedCar}
+              year={year}
+              engine={engine}
+              hp={hp}
+              binary={binary}
+              price={price}
+            />
 
-      <CarDetails
-        heading="Details"
-        description="Car information"
-        selectedCar={selectedCar}
-        year={year}
-        engine={engine}
-        hp={hp}
-        binary={binary}
-        price={price}
-      />
-
-      {engine && <PerformanceOptions option={option} setOption={setOption} />}
+            <PerformanceOptions option={option} setOption={setOption} />
+          </>
+        )}
+      </div>
     </div>
   );
 };
