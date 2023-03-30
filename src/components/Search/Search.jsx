@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { CarDetails, Select } from "./elements/index.js";
+import data from "../../data.json";
 
 // Define a constant named "data" that contains an array of car objects.
-const data = [
-  // Data
-];
 
 const Search = () => {
   const [marca, setMarca] = useState();
@@ -79,16 +77,16 @@ const Search = () => {
 
       switch (option) {
         case "Eco":
-          binario *= 1.19;
+          binario *= 1.2;
           cavalos *= 1.2;
           return { binario, cavalos, preco: preco + 50 };
         case "Flex":
-          binario *= 1.215;
-          cavalos *= 1.23;
+          binario *= 1.3;
+          cavalos *= 1.3;
           return { binario, cavalos, preco };
         case "Sport":
-          binario *= 1.24;
-          cavalos *= 1.26;
+          binario *= 1.4;
+          cavalos *= 1.4;
           return { binario, cavalos, preco: preco + 100 };
         default:
           return {};
