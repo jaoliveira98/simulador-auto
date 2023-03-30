@@ -3,97 +3,94 @@ import { CarDetails, Select, PerformanceOptions } from "./elements/index.js";
 import data from "../../data.json";
 
 const Search = () => {
-  const [marca, setMarca] = useState();
-  const [modelo, setModelo] = useState();
-  const [ano, setAno] = useState();
-  const [motor, setMotor] = useState();
+  const [make, setMake] = useState();
+  const [model, setModel] = useState();
+  const [year, setYear] = useState();
+  const [engine, setEngine] = useState();
   const [option, setOption] = useState("Flex");
 
-  // Retrieves and sorts the options available for selecting: brand, model, year, and engine
-  function getSearch(marca, modelo, ano, motor) {
-    const marcas = Array.from(new Set(data.map((car) => car.marca))).sort();
+  // Returns and sorts the options available for selecting: brand, model, year, and engine
+  function getSearch(make, model, year, engine) {
+    const makes = Array.from(new Set(data.map((car) => car.make))).sort();
 
-    const modelos = Array.from(
+    const models = Array.from(
       new Set(
-        data
-          .filter((car) => marca && car.marca === marca)
-          .map((car) => car.modelo)
+        data.filter((car) => make && car.make === make).map((car) => car.model)
       )
     ).sort();
 
-    const anos = Array.from(
+    const years = Array.from(
       new Set(
         data
           .filter(
-            (car) =>
-              marca && modelo && car.marca === marca && car.modelo === modelo
+            (car) => make && model && car.make === make && car.model === model
           )
-          .map((car) => `${car.ano.inicio} - ${car.ano.fim}`)
+          .map((car) => `${car.year.begin} - ${car.year.end}`)
       )
     ).sort();
 
-    const motores = Array.from(
+    const engines = Array.from(
       new Set(
         data
           .filter(
             (car) =>
-              marca &&
-              modelo &&
-              ano &&
-              car.marca === marca &&
-              car.modelo === modelo &&
-              `${car.ano.inicio} - ${car.ano.fim}` === ano
+              make &&
+              model &&
+              year &&
+              car.make === make &&
+              car.model === model &&
+              `${car.year.begin} - ${car.year.end}` === year
           )
           .map(
             (car) =>
-              `${car.motor.cilindrada} ${car.motor.modelo}, ${car.motor.cavalos} CV, ${car.motor.combustivel}`
+              `${car.engine.cc} ${car.engine.model}, ${car.engine.hp} hp, ${car.engine.fuel}`
           )
       )
     ).sort();
 
     const selectedCar = data.find(
       (car) =>
-        marca &&
-        modelo &&
-        ano &&
-        motor &&
-        car.marca === marca &&
-        car.modelo === modelo &&
-        `${car.ano.inicio} - ${car.ano.fim}` === ano &&
-        `${car.motor.cilindrada} ${car.motor.modelo}, ${car.motor.cavalos} CV, ${car.motor.combustivel}` ===
-          motor
+        make &&
+        model &&
+        year &&
+        engine &&
+        car.make === make &&
+        car.model === model &&
+        `${car.year.begin} - ${car.year.end}` === year &&
+        `${car.engine.cc} ${car.engine.model}, ${car.engine.hp} hp, ${car.engine.fuel}` ===
+          engine
     );
-    return { selectedCar, marcas, modelos, anos, motores };
+    return { selectedCar, makes, models, years, engines };
   }
 
-  const { selectedCar, marcas, modelos, anos, motores } = getSearch(
-    marca,
-    modelo,
-    ano,
-    motor
+  const { selectedCar, makes, models, years, engines } = getSearch(
+    make,
+    model,
+    year,
+    engine
   );
 
-  // Returns another function, which calculates the values of a selected car based on the user's performance option.
+  // Returns yearther function, which calculates the values of a selected car based on the user's performance option.
   function getCarValues() {
     return (car) => {
       if (!car) return {};
 
-      const { motor, preco } = car;
-      let { cavalos, binario } = motor;
+      const { engine, price } = car;
+      let { hp, binary } = engine;
 
       switch (option) {
         case "Eco":
-          binario *= 1.2;
-          cavalos *= 1.2;
-          return { binario, cavalos, preco: preco + 50 };
+          binary *= 1.2;
+          hp *= 1.2;
+          return { binary, hp, price: price + 50 };
         case "Flex":
-          binario *= 1.3;
-          cavalos *= 1.3;
-          return { binario, cavalos, preco };
+          binary *= 1.3;
+          hp *= 1.3;
+          return { binary, hp, price };
         case "Sport":
-          binario *= 1.4;
-          cavalos *= 1.4;
-          return { binario, cavalos, preco: preco + 100 };
+          binary *= 1.4;
+          hp *= 1.4;
+          return { binary, hp, price: price + 100 };
         default:
           return {};
       }
@@ -102,55 +99,55 @@ const Search = () => {
 
   const calculateValues = getCarValues();
 
-  // Destructure the returned object into "binario", "cavalos", and "preco" variables.
-  const { binario, cavalos, preco } = calculateValues(selectedCar);
+  // Destructure the returned object into "binary", "hp", and "price" variables.
+  const { binary, hp, price } = calculateValues(selectedCar);
 
   return (
     <div className="flex items-center justify-center flex-col">
       <div className="flex h-12 justify-center gap-4 mb-10">
         <Select
-          value={marca}
+          value={make}
           onChange={(e) => {
-            setMarca(e.target.value);
-            setModelo();
-            setAno();
-            setMotor();
+            setMake(e.target.value);
+            setModel();
+            setYear();
+            setEngine();
           }}
-          map={marcas}
-          placeholder="Select marca"
+          map={makes}
+          placeholder="Select make"
         />
 
         <Select
-          value={modelo}
+          value={model}
           onChange={(e) => {
-            setModelo(e.target.value);
-            setAno();
-            setMotor();
+            setModel(e.target.value);
+            setYear();
+            setEngine();
           }}
-          disabled={!marca}
-          map={modelos}
-          placeholder="Select modelo"
+          disabled={!make}
+          map={models}
+          placeholder="Select model"
         />
 
         <Select
-          value={ano}
+          value={year}
           onChange={(e) => {
-            setAno(e.target.value);
-            setMotor();
+            setYear(e.target.value);
+            setEngine();
           }}
-          disabled={!modelo}
-          map={anos}
-          placeholder="Select ano"
+          disabled={!model}
+          map={years}
+          placeholder="Select year"
         />
 
         <Select
-          value={motor}
+          value={engine}
           onChange={(e) => {
-            setMotor(e.target.value);
+            setEngine(e.target.value);
           }}
-          disabled={!ano}
-          map={motores}
-          placeholder="Select motor"
+          disabled={!year}
+          map={engines}
+          placeholder="Select engine"
         />
       </div>
 
@@ -158,14 +155,14 @@ const Search = () => {
         heading="Details"
         description="Car information"
         selectedCar={selectedCar}
-        ano={ano}
-        motor={motor}
-        cavalos={cavalos}
-        binario={binario}
-        preco={preco}
+        year={year}
+        engine={engine}
+        hp={hp}
+        binary={binary}
+        price={price}
       />
 
-      {motor && <PerformanceOptions option={option} setOption={setOption} />}
+      {engine && <PerformanceOptions option={option} setOption={setOption} />}
     </div>
   );
 };

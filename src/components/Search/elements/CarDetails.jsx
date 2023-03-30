@@ -2,11 +2,11 @@ function CarDetails({
   heading,
   description,
   selectedCar,
-  ano,
-  motor,
-  cavalos,
-  binario,
-  preco,
+  year,
+  engine,
+  hp,
+  binary,
+  price,
 }) {
   return (
     <div className="container mx-auto overflow-hidden bg-white shadow sm:rounded-lg">
@@ -18,16 +18,16 @@ function CarDetails({
         <dl>
           {selectedCar && (
             <div className="bg-gray-50 text-black px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <p>Marca: {selectedCar.marca}</p>
-              <p>Modelo: {selectedCar.modelo}</p>
-              <p>Ano: {ano}</p>
-              <p>Motor: {motor}</p>
-              <p>Cavalos: {Math.ceil(cavalos)} CV</p>
-              <p>Binario: {Math.ceil(binario)} NM</p>
-              <p>Preco: {Math.ceil(preco)} €</p>
+              <p>Make: {selectedCar.make}</p>
+              <p>Model: {selectedCar.model}</p>
+              <p>Year: {year}</p>
+              <p>Engine: {engine}</p>
+              <p>Horse Power: {Math.ceil(hp)} HP</p>
+              <p>Binary: {Math.ceil(binary)} NM</p>
+              <p>Price: {Math.ceil(price)} €</p>
               <img
                 src={selectedCar.image}
-                alt={`${selectedCar.marca} ${selectedCar.modelo}`}
+                alt={`${selectedCar.make} ${selectedCar.model}`}
                 style={{ maxWidth: "300px" }}
               />
             </div>
