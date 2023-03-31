@@ -23,3 +23,14 @@
   min-height: 100%;
   object-fit: cover;
 }
+
+video {
+  filter: brightness(0.2);
+}
+
+.strokeme {
+  color: white;
+  background-color: white;
+  text-shadow: -1px -1px 0 #9b2a1d, 1px -1px 0 #9b2a1d, -1px 1px 0 #9b2a1d,
+    1px 1px 0 #9b2a1d;
+}
