@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { CarDetails, Select, PerformanceOptions } from "./elements/index.js";
+import { Select } from "./elements/index.js";
 import data from "../../data.json";
+import { useNavigate } from "react-router-dom";
 
 const Search = () => {
   const [make, setMake] = useState();
@@ -8,7 +9,6 @@ const Search = () => {
   const [year, setYear] = useState();
   const [engine, setEngine] = useState();
   const [option, setOption] = useState("Flex");
-  const [showDetails, setShowDetails] = useState(false);
 
   // Returns and sorts the options available for selecting: brand, model, year, and engine
   function getSearch(make, model, year, engine) {
@@ -105,9 +105,25 @@ const Search = () => {
 
   const searchAvailable = make && model && year && engine;
 
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (searchAvailable) {
+      localStorage.setItem("selectedCar", JSON.stringify(selectedCar));
+      localStorage.setItem("year", year);
+      localStorage.setItem("engine", engine);
+      localStorage.setItem("hp", hp);
+      localStorage.setItem("binary", binary);
+      localStorage.setItem("price", price);
+      localStorage.setItem("option", option);
+
+      navigate(`/${make}-${model}`);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center flex-col">
-      <div className="flex h-12 justify-center gap-4 mb-10">
+      <div className="flex flex-col md:flex-row h-12 justify-center gap-4 mb-10 ">
         <Select
           value={make}
           onChange={(e) => {
@@ -154,36 +170,19 @@ const Search = () => {
         />
       </div>
       <button
-        className={`px-4 py-2 rounded text-white ${
-          searchAvailable ? "bg-green-500" : "bg-blue-500"
+        className={`flex items-center gap-4 px-4 py-3 rounded text-[#5f0e0d] uppercase strokeme font-bold ${
+          searchAvailable ? " bg-[#a11c1a] " : "bg-[#9B2A1D] "
         }`}
-        onClick={() => {
-          if (searchAvailable) {
-            setShowDetails(true); // Update the state to show details
-          }
-        }}
+        onClick={handleSearch}
         disabled={!searchAvailable}
       >
-        Search
+        <div
+          className={`h-2 w-5 duration-300 shadow-md rounded-full ${
+            searchAvailable ? " bg-[#3bf550]" : "bg-[#858585]"
+          }`}
+        />
+        Simulate
       </button>
-      <div>
-        {showDetails && (
-          <>
-            <CarDetails
-              heading="Details"
-              description="Car information"
-              selectedCar={selectedCar}
-              year={year}
-              engine={engine}
-              hp={hp}
-              binary={binary}
-              price={price}
-            />
-
-            <PerformanceOptions option={option} setOption={setOption} />
-          </>
-        )}
-      </div>
     </div>
   );
 };
